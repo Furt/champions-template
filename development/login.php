@@ -66,10 +66,9 @@ animatedcollapse.init()
 		<div class="nav_bg">
 			<div id='nav_home'>
         	<div class="nav_items">
-				<a href="register.php">Register</a><br />
-<a href="#">TEST 2</a><br />
-<a href="#">TEST 3</a><br />
-<a href="#">TEST 4</a><br /></div></div></div>
+				<a href="index.php">Main</a><br />
+<a href="login.php">Login</a><br />
+<a href="register.php">Register</a><br /></div></div></div>
 
 	<div class="nav_title">
 		<div class="img_txt">
