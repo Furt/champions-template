@@ -43,7 +43,7 @@ animatedcollapse.init()
 <div class="menu">
 	<div class="menu" id="form">
 <?php
-if(!$session['username']){
+if(!file_exists('users/' . $_SESSION['username'] . '.xml')){
 ?>
 	<form name="login" action="<?php $_SERVER['PHP_SELF'];?>" method="post">
 	User
