@@ -1,3 +1,20 @@
+<?php
+$error = false;
+if(isset($_POST['login'])){
+	$username = preg_replace('/[^A-Za-z]/', '', $_POST['username']);
+	$password = md5($_POST['password']);
+	if(file_exists('users/' . $username . '.xml')){
+		$xml = new SimpleXMLElement('users/' . $username . '.xml', 0, true);
+		if($password == $xml->password){
+			session_start();
+			$_SESSION['username'] = $username;
+			header('Location: index.php');
+			die;
+		}
+	}
+	$error = true;
+}
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -25,13 +42,23 @@ animatedcollapse.init()
 <body class="champions">
 <div class="menu">
 	<div class="menu" id="form">
-<form name="login" action="index.php" method="post">
-User
-<input type="text" name="user" size="20" />
-Pass
-<input type="password" name="pass" size="20" />
-<input type="submit" value="Submit" />
-</form>
+<?php
+if(!$session['username']){
+?>
+	<form name="login" action="<?php $_SERVER['PHP_SELF'];?>" method="post">
+	User
+	<input type="text" name="username" size="20" />
+	Pass
+	<input type="password" name="password" size="20" />
+	<input type="submit" value="Submit" />
+	</form>
+<?php
+}else{
+?>
+Welcome, <?php echo $_SESSION['username']; ?>
+<?php
+}
+?>
 </div></div>
 <div id="container">
   <div id="header">
@@ -47,7 +74,7 @@ Pass
 		<div class="nav_bg">
 			<div id='nav_home'>
         	<div class="nav_items">
-				<a href="#">TEST 1</a><br />
+				<a href="register.php">Register</a><br />
 <a href="#">TEST 2</a><br />
 <a href="#">TEST 3</a><br />
 <a href="#">TEST 4</a><br /></div></div></div>
