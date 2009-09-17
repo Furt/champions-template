@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+error_reporting(5);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -11,33 +11,35 @@ session_start();
 	<link href="champions.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="./js/jquery.min.js"></script>
 	<script type="text/javascript" src="./js/animatedcollapse.js"></script>
-	<script type="text/javascript">
-animatedcollapse.addDiv('nav_home', 'fade=0,speed=100')
-animatedcollapse.addDiv('nav_com', 'fade=0,speed=100')
-animatedcollapse.addDiv('nav_login', 'fade=0,speed=100')
-animatedcollapse.addDiv('nav_help', 'fade=0,speed=100')
-animatedcollapse.ontoggle=function($, divobj, state){ //fires each time a DIV is expanded/contracted
-	//$: Access to jQuery
-	//divobj: DOM reference to DIV being expanded/ collapsed. Use "divobj.id" to get its ID
-	//state: "block" or "none", depending on state
-}
-
-animatedcollapse.init()
-
-	</script>
+	<script type="text/javascript" src="./js/nav-config.js"></script>
 </head>
 <body class="champions">
 <div class="menu">
+<?php
+$error = false;
+if(isset($_POST['login'])){
+	$username = preg_replace('/[^A-Za-z]/', '', $_POST['username']);
+	$password = md5($_POST['password']);
+	if(file_exists('users/' . $username . '.xml')){
+		$xml = new SimpleXMLElement('users/' . $username . '.xml', 0, true);
+		if($password == $xml->password){
+			$_SESSION['username'] = $username;
+		}
+	}
+	$error = true;
+}
+?>
 	<div class="menu" id="form">
-
-	<form name="" action="" method="">
-	User
-	<input type="text" name="username" size="20" />
-	Pass
-	<input type="password" name="password" size="20" />
-	<input type="submit" value="Submit" />
-	</form>
-
+	<?php
+	if(!file_exists('users/' . $_SESSION['username'] . '.xml')){
+	echo '<form method="post" action="">';
+	echo 'User<input type="text" name="username" size="20" />';
+	echo 'Pass<input type="password" name="password" size="20" />';
+	echo '<input type="submit" value="Login" name="login" /></form>';
+	}else{
+	?>
+	Welcome, <?php echo $_SESSION['username']; ?> - <a href="logout.php">Logout</a>
+	<?php } ?>
 </div></div>
 <div id="container">
   <div id="header">
@@ -100,12 +102,10 @@ animatedcollapse.init()
   <div id="mainContent">
 <?php 
  if(!file_exists('users/' . $_SESSION['username'] . '.xml')){
-		header('Location: login.php');
-	die;
-}
+	echo 'You must be loged in to view this page.';
+	}else{
 ?>
-	<h1>User Page</h1>
-	<h2>Welcome, <?php echo $_SESSION['username']; ?></h2>
+	<h1>User Page</h1><hr />
 	<table>
 		<tr>
 			<th>Username</th>
@@ -125,12 +125,12 @@ animatedcollapse.init()
 	</table>
 	<hr />
 	<a href="changepass.php">Change Password</a>
-	-
-	<a href="logout.php">Logout</a>
+<?php } ?>
+
 	<!-- end of Maincontent --></div>
 	  <div class='footer'>
 This site is in no way affiliated with Cryptic Studios and Champions Online.
-<br/>© 2009 MMO-Source.net, Inc. All Rights Reserved.<br/>Template by: Furt
+<br/>© 2009 MMO-Source.net, Inc. All Rights Reserved. Template by: Furt
 </div>
 	
 <!-- end of container --></div>

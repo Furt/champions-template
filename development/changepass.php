@@ -31,33 +31,35 @@ if(isset($_POST['change'])){
 	<link href="champions.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="./js/jquery.min.js"></script>
 	<script type="text/javascript" src="./js/animatedcollapse.js"></script>
-	<script type="text/javascript">
-animatedcollapse.addDiv('nav_home', 'fade=0,speed=100')
-animatedcollapse.addDiv('nav_com', 'fade=0,speed=100')
-animatedcollapse.addDiv('nav_login', 'fade=0,speed=100')
-animatedcollapse.addDiv('nav_help', 'fade=0,speed=100')
-animatedcollapse.ontoggle=function($, divobj, state){ //fires each time a DIV is expanded/contracted
-	//$: Access to jQuery
-	//divobj: DOM reference to DIV being expanded/ collapsed. Use "divobj.id" to get its ID
-	//state: "block" or "none", depending on state
-}
-
-animatedcollapse.init()
-
-	</script>
+	<script type="text/javascript" src="./js/nav-config.js"></script>
 </head>
 <body class="champions">
 <div class="menu">
+<?php
+$error = false;
+if(isset($_POST['login'])){
+	$username = preg_replace('/[^A-Za-z]/', '', $_POST['username']);
+	$password = md5($_POST['password']);
+	if(file_exists('users/' . $username . '.xml')){
+		$xml = new SimpleXMLElement('users/' . $username . '.xml', 0, true);
+		if($password == $xml->password){
+			$_SESSION['username'] = $username;
+		}
+	}
+	$error = true;
+}
+?>
 	<div class="menu" id="form">
-
-	<form name="" action="" method="">
-	User
-	<input type="text" name="username" size="20" />
-	Pass
-	<input type="password" name="password" size="20" />
-	<input type="submit" value="Submit" />
-	</form>
-
+	<?php
+	if(!file_exists('users/' . $_SESSION['username'] . '.xml')){
+	echo '<form method="post" action="">';
+	echo 'User<input type="text" name="username" size="20" />';
+	echo 'Pass<input type="password" name="password" size="20" />';
+	echo '<input type="submit" value="Login" name="login" /></form>';
+	}else{
+	?>
+	Welcome, <?php echo $_SESSION['username']; ?> - <a href="logout.php">Logout</a>
+	<?php } ?>
 </div></div>
 <div id="container">
   <div id="header">
@@ -117,7 +119,7 @@ animatedcollapse.init()
   
   <!-- Main Content -->
   <div id="mainContent">
-<h1>Change Password</h1>
+<h1>Change Password</h1><hr />
 	<form method="post" action="">
 		<?php 
 		if($error){
@@ -130,11 +132,11 @@ animatedcollapse.init()
 		<p><input type="submit" name="change" value="Change Password" /></p>
 	</form>
 	<hr />
-	<a href="index.php">User home</a>
+
 	<!-- end of Maincontent --></div>
 	  <div class='footer'>
 This site is in no way affiliated with Cryptic Studios and Champions Online.
-<br/>© 2009 MMO-Source.net, Inc. All Rights Reserved.<br/>Template by: Furt
+<br/>© 2009 MMO-Source.net, Inc. All Rights Reserved. Template by: Furt
 </div>
 	
 <!-- end of container --></div>
