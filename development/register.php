@@ -1,4 +1,5 @@
 <?php
+error_reporting(5);
 $errors = array();
 if(isset($_POST['login'])){
 	$username = preg_replace('/[^A-Za-z]/', '', $_POST['username']);
