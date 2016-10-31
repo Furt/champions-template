@@ -87,7 +87,7 @@ Pass
 	<!-- end of Maincontent --></div>
 	  <div class='footer'>
 This site is in no way affiliated with Cryptic Studios and Champions Online.
-<br/>© 2009 crimson-storm.net, Inc. All Rights Reserved.<br/>Template by: Furt
+<br/>© 2009, 2016 Crimson-Gaming.com, All Rights Reserved.<br/>Template by: Furt
 </div>
 	
 <!-- end of container --></div>
